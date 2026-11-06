@@ -670,7 +670,7 @@ main,section{padding-bottom:70px}.fab{bottom:calc(76px + env(safe-area-inset-bot
 <script>
 /* ---- Standalone mode: when the app runs outside Claude (Koder, a browser, a website) it stores data on this device ---- */
 (function(){if(window.claude&&window.claude.use)return;
-  const P='samitaxi:';const L={};let seq=0;
+  const P='Ibrahimtaxi:';const L={};let seq=0;
   const read=k=>{try{const v=localStorage.getItem(P+k);return v?JSON.parse(v):null}catch(_){return null}};
   const write=(k,v)=>{try{if(v==null)localStorage.removeItem(P+k);else localStorage.setItem(P+k,JSON.stringify(v))}catch(e){alert('Storage full on this device');throw e}};
   const allKeys=()=>{const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(P))out.push(k.slice(P.length))}return out};
@@ -696,7 +696,7 @@ main,section{padding-bottom:70px}.fab{bottom:calc(76px + env(safe-area-inset-bot
   const db={doc:mkDoc,collection:p=>mkCol(p)};
   const user={isOwner:async()=>true,canEdit:async()=>true,can:async()=>true,id:async()=>'local-owner',me:async()=>({id:'local-owner',name:'',isOwner:true,canEdit:true,avatarUrl:'',color:'#888',email:null}),profiles:async()=>[]};
   const downloads={save:async({filename,data})=>{const b=data instanceof Blob?data:new Blob([data]);const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}};
-  window.SAMI_STANDALONE=true;
+  window.Ibrahim_STANDALONE=true;
   window.claude={use:async n=>n==='db'?db:n==='user'?user:n==='downloads'?downloads:null};
 })();
 
@@ -746,7 +746,7 @@ $('#ivShare').onclick=async()=>{if(!ivCur)return;const ok=await shareImage(ivCur
 $('#fDrv').addEventListener('change',updateDrvPhoto);
 
 document.addEventListener('click',async e=>{const cc=e.target.closest('[data-copycd]');if(!cc)return;const d=state.drivers[+cc.dataset.copycd];try{await navigator.clipboard.writeText(carMsg(d));toast('Copied: '+carMsg(d))}catch(_){toast(carMsg(d))}});
-function askPayment(t){if((drvOf(t.driver)||{}).toSami)t={...t,payTo:t.payTo||'Ibrahim',linkSentBy:t.linkSentBy||''};return new Promise(res=>{
+function askPayment(t){if((drvOf(t.driver)||{}).toIbrahim)t={...t,payTo:t.payTo||'Ibrahim',linkSentBy:t.linkSentBy||''};return new Promise(res=>{
   const dl=$('#payDlg');const cb=(custOf(t.customer)||{}).billing;let sel=t.payType||payFromBill(cb);
   $('#pdTitle').textContent=`${t.customer||'Ride'} · ${t12(t.time)} · ${t.amount==null?'–':fmtKD(+t.amount)}`;
   let lastSel=null;
@@ -960,7 +960,7 @@ document.addEventListener('click',e=>{
 const OWNER='Ibrahim',COM_RATE=0.10;
 const comPct=n=>{const d=drvOf(n)||{};if(!d.payCom)return 0;const p=d.comPct==null||d.comPct===''?10:+d.comPct;return p>0?p:0};
 const rateOf=n=>comPct(n)/100;const paysCom=n=>comPct(n)>0;
-const samiLbl=n=>`Ibrahim (${fmtN(comPct(n))}%)`;
+const IbrahimLbl=n=>`Ibrahim (${fmtN(comPct(n))}%)`;
 state.cset={};
 const csetId=(n,m)=>`${n.replace(/[^A-Za-z0-9]+/g,'_')}__${m}`;
 async function loadCset(n,m){const id=csetId(n,m);if(state.cset[id]!==undefined)return state.cset[id];try{const g=await state.db.doc('cset/'+id).get();state.cset[id]=g.exists?g.data():null}catch(_){state.cset[id]=null}return state.cset[id]}
@@ -1159,9 +1159,9 @@ async function drawComCard(trips,n){const m=state.month;const N=comNums(trips,n)
   const need=N.credit+N.running-N.com+old+TK-GV;const bal=need-paid;if(state.comSel!==n||state.month!==m)return;
   const k=x=>fmtKD(Math.round(x*1000)/1000);const r=(l,v,cls='',b=false)=>`<div class="list-item"><span class="grow ${cls}">${b?'<b>'+l+'</b>':l}</span><span class="${cls}">${b?'<b>'+v+'</b>':v}</span></div>`;
   $('#comCard').innerHTML=`<div class="panel"><h2 style="margin-top:0">${esc(n)} – ${monthLabel(m)}</h2>
-    ${comRow(trips,n,'credit','🔴 Credit',N.credit,k)}${comRow(trips,n,'running','🔵 Running cash',N.running,k)}${comRow(trips,n,'cash','🟢 Cash',N.cash,k)}${r('Total',k(N.total),'',true)}${paysCom(n)?r(samiLbl(n),k(N.com),'kcom'):''}
+    ${comRow(trips,n,'credit','🔴 Credit',N.credit,k)}${comRow(trips,n,'running','🔵 Running cash',N.running,k)}${comRow(trips,n,'cash','🟢 Cash',N.cash,k)}${r('Total',k(N.total),'',true)}${paysCom(n)?r(IbrahimLbl(n),k(N.com),'kcom'):''}
     <h3 style="margin:14px 0 4px">Need to pay ${esc(n)}</h3>
-    ${r('Credit',k(N.credit))}${r('+ Running cash',k(N.running))}${paysCom(n)?r('− '+samiLbl(n),'−'+k(N.com),'kcom'):''}
+    ${r('Credit',k(N.credit))}${r('+ Running cash',k(N.running))}${paysCom(n)?r('− '+IbrahimLbl(n),'−'+k(N.com),'kcom'):''}
     <div class="list-item"><span class="grow">+ Old balance${doc.oldManual!=null?' (typed)':' (last month)'}</span><span>${k(old)} <button class="btn" data-comold style="padding:4px 8px;font-size:13px">Edit</button></span></div>
     ${TK?r('+ Took from him (not settled)',k(TK)):''}${GV?r('− Gave to him (not settled)','−'+k(GV)):''}
     ${openDebts(n).length?`<details style="margin:2px 0 6px"><summary style="cursor:pointer;color:var(--muted);font-size:14px">Open money with ${esc(n)} (${openDebts(n).length})</summary>${openDebts(n).map(x=>`<div class="list-item" style="font-size:14px"><span class="grow">${x.kind==='gave'?'Gave':'Took'} · ${dLabel(x.date)}${x.method?' · '+esc(x.method):''} · ${esc(x.note||'')}</span><b>${k(+x.amount)}</b><button class="btn" data-debtsettle="${esc(x.id)}" style="padding:4px 8px;font-size:13px">Settled</button></div>`).join('')}</details>`:''}
@@ -1169,7 +1169,7 @@ async function drawComCard(trips,n){const m=state.month;const N=comNums(trips,n)
     <div class="list-item" style="font-size:18px"><span class="grow"><b>= Balance</b></span><b style="color:${bal<0?'var(--danger)':'var(--ok)'}">${k(bal)}</b></div>
     <h3 style="margin:14px 0 4px">Paid to ${esc(n)}</h3>
     ${pays.length?pays.map((p,i)=>`<div class="list-item"><span class="grow">${dLabel(p.date)} · ${esc(p.method)}${p.note?' · '+esc(p.note):''}</span><b>${k(+p.amount)}</b><button class="btn" data-comdel="${i}" style="padding:4px 8px;font-size:13px">×</button></div>`).join(''):'<p class="help">No payments yet.</p>'}
-    <div class="actions"><button class="btn primary" data-comadd>+ Add payment</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 1',[['Credit',k(N.credit)],['Running cash',k(N.running)],['Cash',k(N.cash)],'-',['TOTAL',k(N.total)]]))}">Send part 1</a><a class="wa solid" target="_blank" rel="noopener" data-p2sent="${esc(n)}" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 2',[['Credit',k(N.credit)],['Running cash',k(N.running)],...(paysCom(n)?[[samiLbl(n),'-'+k(N.com)],'-',['Total',k(N.credit+N.running-N.com)]]:['-',['Total',k(N.credit+N.running)]]),['Old balance',k(old)],...(TK?[['Took from you',k(TK)]]:[]),...(GV?[['Given to you','-'+k(GV)]]:[]),'-',['NEED TO PAY',k(need)],...(pays.length?['-','Paid:',...pays.map(p=>[`${(()=>{const x=new Date(p.date+'T00:00');return DAYS[x.getDay()].slice(0,3)+' '+x.getDate()})()} ${p.method==='Payment link'?'Link':p.method}`,'-'+k(+p.amount)]),['Total paid','-'+k(paid)]]:[]),'-',['BALANCE',k(bal)]]))}">Send part 2</a></div></div>`;
+    <div class="actions"><button class="btn primary" data-comadd>+ Add payment</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 1',[['Credit',k(N.credit)],['Running cash',k(N.running)],['Cash',k(N.cash)],'-',['TOTAL',k(N.total)]]))}">Send part 1</a><a class="wa solid" target="_blank" rel="noopener" data-p2sent="${esc(n)}" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 2',[['Credit',k(N.credit)],['Running cash',k(N.running)],...(paysCom(n)?[[IbrahimLbl(n),'-'+k(N.com)],'-',['Total',k(N.credit+N.running-N.com)]]:['-',['Total',k(N.credit+N.running)]]),['Old balance',k(old)],...(TK?[['Took from you',k(TK)]]:[]),...(GV?[['Given to you','-'+k(GV)]]:[]),'-',['NEED TO PAY',k(need)],...(pays.length?['-','Paid:',...pays.map(p=>[`${(()=>{const x=new Date(p.date+'T00:00');return DAYS[x.getDay()].slice(0,3)+' '+x.getDate()})()} ${p.method==='Payment link'?'Link':p.method}`,'-'+k(+p.amount)]),['Total paid','-'+k(paid)]]:[]),'-',['BALANCE',k(bal)]]))}">Send part 2</a></div></div>`;
   state.dset[dsetId(n,m)]={...doc};if(doc.balance!==bal){try{await state.db.doc('dset/'+dsetId(n,m)).set({...doc,driver:n,month:m,balance:Math.round(bal*1000)/1000});state.dset[dsetId(n,m)]={...doc,balance:Math.round(bal*1000)/1000}}catch(_){}}}
 async function saveDset(n,m,fn){const id=dsetId(n,m);const doc={...(await loadDset(n,m)||{}),driver:n,month:m};fn(doc);await state.db.doc('dset/'+id).set(doc);state.dset[id]=doc;render()}
 function payDialog(n){return new Promise(res=>{let dl=document.getElementById('cpDlg');if(!dl){dl=document.createElement('div');dl.className='dlg';dl.id='cpDlg';
@@ -1243,8 +1243,8 @@ function renderDrivers(trips){
       ${paysCom(d.name)?`<b class="kcom">Commission ${fmtN(comPct(d.name))}%</b> · `:''}${d.uid?'<b style="color:var(--ok)">Phone linked</b> · ':''}${d.phone?'WhatsApp saved':'<i>No WhatsApp number</i>'} · ${ts.length} trips this month
       ${(()=>{const ow=lv.filter(t=>hoDue(t)&&t.driver===d.name);const hold=lv.filter(t=>hoDue(t)&&t.paidTo===d.name);const sm=a=>fmtKD(a.reduce((x,t)=>x+(+t.amount||0),0));
         const dd=openDebts(d.name).filter(x=>x.kind!=='gave');const dsum=tookSum(d.name);const dg=openDebts(d.name).filter(x=>x.kind==='gave');
-        const tsc=d.toSami?lv.filter(t=>t.driver===d.name&&!t.paid&&payCat(t)!=='cash'):[];
-        return (dd.length?`<br><b style="color:#7C3AED">Ibrahim owes him: ${fmtKD(dsum)}</b> (${dd.map(x=>esc(x.note)+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(dg.length?`<br><b style="color:var(--ok)">Given to him: ${fmtKD(gaveSum(d.name))}</b> (${dg.map(x=>dLabel(x.date)+' '+esc(x.note||'')+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(d.toSami?`<br><b style="color:var(--flag)">Account settled – his money comes to Ibrahim</b>${tsc.length?` · still to come ${sm(tsc)} (${[...new Set(tsc.map(t=>t.customer))].map(esc).join(', ')})`:''}`:'')+(ow.length?`<br><b style="color:var(--danger)">Not yet paid to him: ${sm(ow)}</b> (${[...new Set(ow.map(t=>t.paidTo===OFFICE?'Ibrahim':t.paidTo))].map(esc).join(', ')} must pay)`:'')+(hold.length?`<br><b style="color:var(--flag)">He holds others’ money: ${sm(hold)}</b>`:'')})()}</div>${photoCard(d)}
+        const tsc=d.toIbrahim?lv.filter(t=>t.driver===d.name&&!t.paid&&payCat(t)!=='cash'):[];
+        return (dd.length?`<br><b style="color:#7C3AED">Ibrahim owes him: ${fmtKD(dsum)}</b> (${dd.map(x=>esc(x.note)+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(dg.length?`<br><b style="color:var(--ok)">Given to him: ${fmtKD(gaveSum(d.name))}</b> (${dg.map(x=>dLabel(x.date)+' '+esc(x.note||'')+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(d.toIbrahim?`<br><b style="color:var(--flag)">Account settled – his money comes to Ibrahim</b>${tsc.length?` · still to come ${sm(tsc)} (${[...new Set(tsc.map(t=>t.customer))].map(esc).join(', ')})`:''}`:'')+(ow.length?`<br><b style="color:var(--danger)">Not yet paid to him: ${sm(ow)}</b> (${[...new Set(ow.map(t=>t.paidTo===OFFICE?'Ibrahim':t.paidTo))].map(esc).join(', ')} must pay)`:'')+(hold.length?`<br><b style="color:var(--flag)">He holds others’ money: ${sm(hold)}</b>`:'')})()}</div>${photoCard(d)}
       ${dayTs.length?`<details style="margin-top:6px"><summary style="cursor:pointer;color:var(--muted);font-size:14px">See rides</summary>${dayTs.map(t=>{const pc=payCat(t);const c=pc!=='credit';return `<div class="list-item ride ${pc==='cash'?'rcash':pc==='running'?'rrun':'rcred'}" style="font-size:14px"><span class="grow">${isM?dLabel(t.date)+' · ':''}${t12(t.time)} · <b>${esc(t.customer)}</b><br><span style="color:var(--muted)">${esc(t.from)} → ${esc(t.to)}</span></span><span style="text-align:right"><b class="ramt">${t.amount==null?'–':fmtKD(+t.amount)}</b><br><span class="tag">${CAT[pc].l}</span></span></div>`}).join('')}</details>`:''}
       <div class="acts"><button class="btn" data-editdrv="${i}">Edit details</button><button class="btn" data-dtook="${esc(d.name)}">Took money</button><button class="btn" data-dgave="${esc(d.name)}">Gave money</button>${(d.photos||[]).length?`<button class="btn" data-view="${esc(d.photos[0])}" data-vdrv="${esc(d.name)}">Car photo</button>`:''}
       ${d.token?`<a class="wa" target="_blank" rel="noopener" href="${waLink(d.phone,`Hi ${d.name}, your rides are here (open while signed in to Claude). Keep this link private:\n${APP_URL}#d-${d.token}\n\nIf it asks, your rides code is: ${d.token}`)}">Send his rides link</a>`:`<button class="btn" data-mklink="${i}">Create driver link</button>`}</div></div>`})()).join(''):'<div class="empty"><b>No drivers found</b>Try another name or add a driver.</div>';
@@ -1699,7 +1699,7 @@ function renderRecv(trips){preloadCset();const all=recvEntries(trips);const recv
   const L=all.filter(e=>(!cur||e.to===cur)&&(!state.prType||e.type===state.prType||(state.prType!=='credit'&&e.method===state.prType))&&(!pq||e.customer.toLowerCase().includes(pq)));
   const sum=a=>a.reduce((x,e)=>x+e.amount,0);$('#sumRecv').innerHTML=`<b>${L.length?[...new Set(L.map(e=>e.customer))].length:0}</b> customers · ${HA(fmtKD(sum(L)))}`;
   const G={};L.forEach(e=>{const k=e.customer+'|'+e.to+'|'+e.kind;(G[k]=G[k]||[]).push(e)});const keys=Object.keys(G).sort((a,b)=>a.localeCompare(b));state.prOpen=state.prOpen||{};
-  const byR={};L.forEach(e=>byR[e.to]=(byR[e.to]||0)+e.amount);const sami=byR.Ibrahim||0;const drv=Object.entries(byR).filter(([r])=>r!=='Ibrahim');
+  const byR={};L.forEach(e=>byR[e.to]=(byR[e.to]||0)+e.amount);const Ibrahim=byR.Ibrahim||0;const drv=Object.entries(byR).filter(([r])=>r!=='Ibrahim');
   state.prRows=keys.map(k=>{const es=G[k];const ds=es.map(e=>e.date).sort();return {customer:es[0].customer,to:es[0].to,kind:es[0].kind,fors:[...new Set(es.filter(e=>e.kind==='for').map(e=>e.forDrv))],total:sum(es),methods:[...new Set(es.map(e=>e.method==='Payment link'?'Link':e.method).filter(Boolean))].join(', '),from:ds[0],till:ds[ds.length-1],n:es.reduce((x,e)=>x+e.rides,0),es}});
   const SE=L.filter(e=>e.to==='Ibrahim');const kb=k=>SE.filter(e=>e.kind===k);const lst=(a,f)=>{const g={};a.forEach(e=>{const kk=f(e);g[kk]=(g[kk]||0)+e.amount});return Object.entries(g).map(([kk,v])=>esc(kk)+' '+fmtKD(v)).join(' · ')};
   const forG={};kb('for').forEach(e=>{(forG[e.customer]=forG[e.customer]||{})[e.forDrv]=(forG[e.customer][e.forDrv]||0)+e.amount});
@@ -1707,12 +1707,12 @@ function renderRecv(trips){preloadCset();const all=recvEntries(trips);const recv
     <div style="margin-top:6px"><b class="kcash">🟢 Ibrahim’s own rides · ${HA(fmtKD(sum(kb('own'))))}</b><br><span class="help">${lst(kb('own'),e=>e.customer)||'–'}</span></div>
     <div style="margin-top:6px"><b class="kcred">🔴 Monthly payments (credit) · ${HA(fmtKD(sum(kb('monthly'))))}</b><br><span class="help">${lst(kb('monthly'),e=>e.customer)||'–'} · belongs to the drivers who did the rides – settled in Commission</span></div>
     <div style="margin-top:6px"><b class="krun">🔵 Running cash for other drivers · ${HA(fmtKD(sum(kb('for'))))}</b><br><span class="help">${Object.entries(forG).map(([c,o])=>esc(c)+' → '+Object.entries(o).map(([d,v])=>esc(d)+' '+fmtKD(v)).join(', ')).join(' · ')||'–'}${kb('for').length?' · pay these drivers (Payments ③)':''}</span></div></div>`:'';
-  state.prSamiBox={own:sum(kb('own')),monthly:sum(kb('monthly')),forO:sum(kb('for')),all:sum(SE)};
+  state.prIbrahimBox={own:sum(kb('own')),monthly:sum(kb('monthly')),forO:sum(kb('for')),all:sum(SE)};
   $('#recvList').innerHTML=box+(keys.length?state.prRows.map((r,i)=>{const k=keys[i];const op=!!state.prOpen[k];
     return `<div class="lgroup"><div class="lgrow"><span class="grow"><b>${esc(r.customer)}</b> · <b>${fmtKD(r.total)}</b><br><span style="color:var(--muted);font-size:13px">${esc(r.methods)} · ${dLabel(r.from)}${r.till!==r.from?' – '+dLabel(r.till):''} · received by <b style="color:var(--ink)">${esc(r.to)}</b> ${kindBadge(r)}</span></span><button class="btn" data-prdet="${esc(k)}">${op?'Hide':'Details'}</button></div>
       ${op?`<div class="lgdet">${r.es.map(e=>`<div class="list-item" style="font-size:13.5px"><span class="grow">${dLabel(e.date)} · ${esc(e.method==='Payment link'?'Link':e.method)}${e.ride?` · ${esc(e.ride.from)} → ${esc(e.ride.to)} (${dLabel(e.ride.date)})`:` · statement payment${e.rides?' · '+e.rides+' rides':''}${e.note?' · '+esc(e.note):''}`}</span><b>${fmtKD(e.amount)}</b></div>`).join('')}</div>`:''}</div>`}).join('')+
-    `<div class="lgtotal">Received by Ibrahim: <b>${HA(fmtKD(sami))}</b> · by drivers: <b>${HA(fmtKD(drv.reduce((x,[,v])=>x+v,0)))}</b>${drv.length?`<br><span style="font-size:13px;color:var(--muted)">${drv.sort((a,b)=>a[0].localeCompare(b[0])).map(([r,v])=>esc(r)+' '+fmtKD(v)).join(' · ')}</span>`:''}</div>
-    <div class="actions"><button class="btn" data-prxls>Download Excel</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink('',monoTable(`Payments received – ${monthLabel(state.month)}`,cur?'Received by '+cur:'All receivers',[...state.prRows.map(r=>[`${r.customer} (${r.to}${r.kind==='monthly'?', monthly':r.kind==='for'?', for '+r.fors.join('/'):''})`,fmtKD(r.total)]),'-',['Ibrahim own rides',fmtKD(state.prSamiBox.own)],['Ibrahim monthly',fmtKD(state.prSamiBox.monthly)],['Ibrahim for drivers',fmtKD(state.prSamiBox.forO)],['Ibrahim total',fmtKD(sami)],...drv.map(([n,v])=>[n,fmtKD(v)]),'-',['TOTAL',fmtKD(sum(L))]]))}">Send on WhatsApp</a></div>`
+    `<div class="lgtotal">Received by Ibrahim: <b>${HA(fmtKD(Ibrahim))}</b> · by drivers: <b>${HA(fmtKD(drv.reduce((x,[,v])=>x+v,0)))}</b>${drv.length?`<br><span style="font-size:13px;color:var(--muted)">${drv.sort((a,b)=>a[0].localeCompare(b[0])).map(([r,v])=>esc(r)+' '+fmtKD(v)).join(' · ')}</span>`:''}</div>
+    <div class="actions"><button class="btn" data-prxls>Download Excel</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink('',monoTable(`Payments received – ${monthLabel(state.month)}`,cur?'Received by '+cur:'All receivers',[...state.prRows.map(r=>[`${r.customer} (${r.to}${r.kind==='monthly'?', monthly':r.kind==='for'?', for '+r.fors.join('/'):''})`,fmtKD(r.total)]),'-',['Ibrahim own rides',fmtKD(state.prIbrahimBox.own)],['Ibrahim monthly',fmtKD(state.prIbrahimBox.monthly)],['Ibrahim for drivers',fmtKD(state.prIbrahimBox.forO)],['Ibrahim total',fmtKD(Ibrahim)],...drv.map(([n,v])=>[n,fmtKD(v)]),'-',['TOTAL',fmtKD(sum(L))]]))}">Send on WhatsApp</a></div>`
     :'<p class="help">No payments received for these filters.</p>')}
 function kindBadge(r){return r.kind==='own'?`<span class="pill full" style="margin:0">${r.to==='Ibrahim'?'Ibrahim’s ride':'Own ride'}</span>`:r.kind==='monthly'?'<span class="pill" style="margin:0;background:#B4231818;color:var(--danger)">Monthly</span>':`<span class="pill" style="margin:0;background:#2563EB1f;color:#2563EB">For ${esc(r.fors.join(', '))}</span>`}
 document.addEventListener('click',async e=>{const d=e.target.closest('[data-prdet]');if(d){state.prOpen=state.prOpen||{};state.prOpen[d.dataset.prdet]=!state.prOpen[d.dataset.prdet];render();return}
@@ -2013,7 +2013,7 @@ function driverStatement(name){const f=stmtFilter();state.stmtFor={type:'d',name
   ts.forEach(t=>S[totCat(t)]+=(+t.amount||0));const T=S.cash+S.running+S.credit;
   let s=`${name} – ${monthLabel(state.month)}${fLbl(f)}\n\nSUMMARY\n${ts.length} rides · Total ${fmtKD(T)}\n`;
   ['cash','running','credit'].forEach(k=>{if(!f||f===k)s+=`${CAT[k].e} ${CAT[k].l} ${fmtKD(S[k])}\n`});
-  if(paysCom(name)){const cm=T*rateOf(name);s+=`${samiLbl(name)}: ${fmtKD(cm)} · You get: ${fmtKD(T-cm)}\n`}
+  if(paysCom(name)){const cm=T*rateOf(name);s+=`${IbrahimLbl(name)}: ${fmtKD(cm)} · You get: ${fmtKD(T-cm)}\n`}
   s+=`\nRIDES${!f?'  (🟢 Cash  🔵 Running cash  🔴 Credit)':''}\n`;let last='';
   ts.forEach(t=>{const a=+t.amount||0;if(t.date!==last){s+=`\n${dLabel(t.date)}\n`;last=t.date}
     s+=`${CAT[totCat(t)].e} ${t12(t.time)}  ${t.customer}: ${t.from} → ${t.to}  ${t.amount==null?'price pending':fmtKD(a)}\n`});
