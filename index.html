@@ -294,7 +294,7 @@ select.need{border:2px solid var(--danger)!important;background:#B4231814!import
 <body>
 <div class="wrap">
   <header>
-    <div class="brand">🚕 Sami Taxi</div>
+    <div class="brand">🚕 IBRAHIM Taxi</div>
     <div class="hrow">
       <div class="month">
         <button id="prevM" aria-label="Previous month">‹</button>
@@ -354,7 +354,7 @@ select.need{border:2px solid var(--danger)!important;background:#B4231814!import
       <div id="totBox_credit" data-tfpay="credit"><span>Credit</span><b id="tot_credit" class="kcred">0</b></div>
       <div id="totBox_all" data-tfpay=""><span>Total</span><b id="tot_all">0</b></div>
     </div>
-    <div class="panel" id="comPanel" hidden><div style="color:var(--muted);font-size:13px">Sami’s commission · <span id="comMonth"></span></div>
+    <div class="panel" id="comPanel" hidden><div style="color:var(--muted);font-size:13px">IBRAHIM’s commission · <span id="comMonth"></span></div>
       <b class="kcom" style="font:700 30px var(--cond)"><span id="comTotal">0</span> KD</b>
       <p style="margin:6px 0 0;font-size:14px">Only drivers with “Pays commission” ticked. Tap a driver to see what you need to pay him.</p></div>
     <div id="totHead"></div>
@@ -656,7 +656,7 @@ select.need{border:2px solid var(--danger)!important;background:#B4231814!import
 <script>
 /* ---- Standalone mode: when the app runs outside Claude (Koder, a browser, a website) it stores data on this device ---- */
 (function(){if(window.claude&&window.claude.use)return;
-  const P='samitaxi:';const L={};let seq=0;
+  const P='IBRAHIMtaxi:';const L={};let seq=0;
   const read=k=>{try{const v=localStorage.getItem(P+k);return v?JSON.parse(v):null}catch(_){return null}};
   const write=(k,v)=>{try{if(v==null)localStorage.removeItem(P+k);else localStorage.setItem(P+k,JSON.stringify(v))}catch(e){alert('Storage full on this device');throw e}};
   const allKeys=()=>{const out=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith(P))out.push(k.slice(P.length))}return out};
@@ -682,7 +682,7 @@ select.need{border:2px solid var(--danger)!important;background:#B4231814!import
   const db={doc:mkDoc,collection:p=>mkCol(p)};
   const user={isOwner:async()=>true,canEdit:async()=>true,can:async()=>true,id:async()=>'local-owner',me:async()=>({id:'local-owner',name:'',isOwner:true,canEdit:true,avatarUrl:'',color:'#888',email:null}),profiles:async()=>[]};
   const downloads={save:async({filename,data})=>{const b=data instanceof Blob?data:new Blob([data]);const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=filename;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},2000)}};
-  window.SAMI_STANDALONE=true;
+  window.IBRAHIM_STANDALONE=true;
   window.claude={use:async n=>n==='db'?db:n==='user'?user:n==='downloads'?downloads:null};
 })();
 
@@ -732,7 +732,7 @@ $('#ivShare').onclick=async()=>{if(!ivCur)return;const ok=await shareImage(ivCur
 $('#fDrv').addEventListener('change',updateDrvPhoto);
 
 document.addEventListener('click',async e=>{const cc=e.target.closest('[data-copycd]');if(!cc)return;const d=state.drivers[+cc.dataset.copycd];try{await navigator.clipboard.writeText(carMsg(d));toast('Copied: '+carMsg(d))}catch(_){toast(carMsg(d))}});
-function askPayment(t){if((drvOf(t.driver)||{}).toSami)t={...t,payTo:t.payTo||'Sami',linkSentBy:t.linkSentBy||''};return new Promise(res=>{
+function askPayment(t){if((drvOf(t.driver)||{}).toIBRAHIM)t={...t,payTo:t.payTo||'IBRAHIM',linkSentBy:t.linkSentBy||''};return new Promise(res=>{
   const dl=$('#payDlg');const cb=(custOf(t.customer)||{}).billing;let sel=t.payType||payFromBill(cb);
   $('#pdTitle').textContent=`${t.customer||'Ride'} · ${t12(t.time)} · ${t.amount==null?'–':fmtKD(+t.amount)}`;
   let lastSel=null;
@@ -814,7 +814,7 @@ function render(){
 }
 function tripCard(t,withContact,showDate){
   const c=withContact?custOf(t.customer):null;
-  const pill=(t.own?`<span class="pill own">${esc(t.driver||'Driver')}’s own trip</span>`:'')+(isComplete(t)?`<span class="pill full">✓ Complete</span>`:isPending(t)&&!hoDue(t)?`<span class="pill pend">Pending · ${esc(t.payType)}</span>`:'')+(isAirport(t)?`<span class="pill air">✈ ${esc(t.air&&t.air.flight||'Airport')}</span>`:'')+(t.status==='cancelled'?'<span class="pill cancelled">Cancelled</span>':'')+(t.status==='done'&&t.payType==='Payment link'&&!t.paid?`<span class="pill tocollect">Link · waiting</span>`:'')+(t.status==='booked'&&t.payType&&t.payType!=='credit'?`<span class="pill tocollect">${esc(t.payType==='Payment link'?'Link':t.payType)} · to collect</span>`:'')+(hoDue(t)?`<span class="pill price">Paid to ${esc(t.paidTo===OFFICE?'Sami':t.paidTo)} · not paid to ${esc(t.driver)} yet</span>`:t.paid&&t.status==='done'&&!isComplete(t)?`<span class="pill paid">Paid${t.paidTo&&t.paidTo!==OFFICE?' · '+esc(t.paidTo):''}</span>`:'')+(t.amount==null&&t.status!=='cancelled'?'<span class="pill price">Price from driver</span>':'');
+  const pill=(t.own?`<span class="pill own">${esc(t.driver||'Driver')}’s own trip</span>`:'')+(isComplete(t)?`<span class="pill full">✓ Complete</span>`:isPending(t)&&!hoDue(t)?`<span class="pill pend">Pending · ${esc(t.payType)}</span>`:'')+(isAirport(t)?`<span class="pill air">✈ ${esc(t.air&&t.air.flight||'Airport')}</span>`:'')+(t.status==='cancelled'?'<span class="pill cancelled">Cancelled</span>':'')+(t.status==='done'&&t.payType==='Payment link'&&!t.paid?`<span class="pill tocollect">Link · waiting</span>`:'')+(t.status==='booked'&&t.payType&&t.payType!=='credit'?`<span class="pill tocollect">${esc(t.payType==='Payment link'?'Link':t.payType)} · to collect</span>`:'')+(hoDue(t)?`<span class="pill price">Paid to ${esc(t.paidTo===OFFICE?'IBRAHIM':t.paidTo)} · not paid to ${esc(t.driver)} yet</span>`:t.paid&&t.status==='done'&&!isComplete(t)?`<span class="pill paid">Paid${t.paidTo&&t.paidTo!==OFFICE?' · '+esc(t.paidTo):''}</span>`:'')+(t.amount==null&&t.status!=='cancelled'?'<span class="pill price">Price from driver</span>':'');
   const cb=t.status==='cancelled'?'<span class="cbx"></span>':`<label class="cbx" title="${t.status==='done'?'Closed':'Open'}"><input type="checkbox" data-close="${esc(t.id)}" data-cdate="${t.date}" ${t.status==='done'?'checked':''} aria-label="Completed: ${esc(t.customer)} ${t12(t.time)}"></label>`;
   const isCash=!!(custOf(t.customer)||{}).cash;
   return `<div class="trip${isCash?' cash':''}${t.check?' flag':''}${t.status==='cancelled'?' cancelled':''}${t.status==='booked'?' open':''}" role="button" tabindex="0" data-date="${t.date}" data-id="${esc(t.id)}">
@@ -837,15 +837,15 @@ function renderToday(trips){const td=today();const tt=trips.filter(t=>t.date===t
   const lv=trips.filter(t=>live(t));const L=lv.filter(t=>t.payType==='Payment link'&&!t.paid);const ns=L.filter(t=>linkState(t)==='notsent');
   const wo=lv.filter(t=>(t.payType==='WAMD'||t.payType==='Cash')&&!t.paid);const cr=lv.filter(t=>payCat(t)==='credit'&&!t.paid&&t.amount!=null);
   const crc=new Set(cr.map(t=>t.customer)).size;const kd=a=>fmtKD(a.reduce((x,t)=>x+(+t.amount||0),0));
-  const owe=(state.debts||[]).filter(x=>!x.paid).reduce((a,x)=>a+(x.kind==='gave'?-1:1)*(+x.amount||0),0)+lv.filter(t=>hoDue(t)&&(t.paidTo==='Sami'||t.paidTo===OFFICE)).reduce((a,t)=>a+(+t.amount||0),0);
-  const hold=lv.filter(t=>hoDue(t)&&t.paidTo!=='Sami'&&t.paidTo!==OFFICE).reduce((a,t)=>a+(+t.amount||0),0);
+  const owe=(state.debts||[]).filter(x=>!x.paid).reduce((a,x)=>a+(x.kind==='gave'?-1:1)*(+x.amount||0),0)+lv.filter(t=>hoDue(t)&&(t.paidTo==='IBRAHIM'||t.paidTo===OFFICE)).reduce((a,t)=>a+(+t.amount||0),0);
+  const hold=lv.filter(t=>hoDue(t)&&t.paidTo!=='IBRAHIM'&&t.paidTo!==OFFICE).reduce((a,t)=>a+(+t.amount||0),0);
   const H=v=>state.hideTot?'XXX':v;const x=new Date(td+'T00:00');
   const IC={link:'🔗',clock:'⏳',cash:'💵','file-invoice':'🧾',users:'👥','arrows-exchange':'🔁'};const row=(icon,label,val,go,cls='')=>`<button class="tdrow" data-tdgo="${go}"><span>${IC[icon]||''} ${label}</span><b class="${cls}">${val}</b></button>`;
   $('#todayBox').innerHTML=`<div class="row" style="justify-content:space-between;align-items:center;margin-bottom:10px"><h2 style="margin:0">Today · ${DAYS[x.getDay()].slice(0,3)} ${x.getDate()} ${MONTHS[x.getMonth()].slice(0,3)}</h2><button class="btn" id="tdEye" style="padding:6px 10px" aria-label="Show or hide money"></button></div>
     <div class="tdgrid"><button class="tdcard" data-tdgo="today"><span>Rides today</span><b>${tt.length}</b><small>${open.length} open</small></button>
       <button class="tdcard ${nod.length?'warn':''}" data-tdgo="nodrv"><span>No driver yet</span><b>${nod.length}</b><small>${nod.length?'tap to assign':'all assigned'}</small></button></div>
     <h3 class="tdh">Money to collect</h3><div class="tdlist">${row('link','Links not sent',`${ns.length} · ${H(kd(ns))}`,'links')}${row('clock','Links pending / failed',`${L.length-ns.length} · ${H(kd(L.filter(t=>linkState(t)!=='notsent')))}`,'links')}${row('cash','WAMD / cash to confirm',`${wo.length} · ${H(kd(wo))}`,'wait')}${row('file-invoice','Credit due',`${crc} customers · ${H(kd(cr))}`,'credit')}</div>
-    <h3 class="tdh">Money to pay</h3><div class="tdlist">${row('users','Sami owes drivers',H(fmtKD(owe)),'owe','kcred')}${row('arrows-exchange','Drivers holding others’ money',H(fmtKD(hold)),'owe')}</div>
+    <h3 class="tdh">Money to pay</h3><div class="tdlist">${row('users','IBRAHIM owes drivers',H(fmtKD(owe)),'owe','kcred')}${row('arrows-exchange','Drivers holding others’ money',H(fmtKD(hold)),'owe')}</div>
     <div class="tdgrid" style="margin-top:12px"><button class="btn primary" data-tdgo="add">+ Add trip</button><button class="btn" data-tdgo="ticket">✈ Import ticket</button></div>
     <p class="help" style="margin-top:10px">${monthLabel(state.month)} figures. Use the tabs above for everything else.</p>`;
   $('#tdEye').innerHTML=$('#totEye')?$('#totEye').innerHTML:'👁';
@@ -920,7 +920,7 @@ function renderTotals(trips){renderClose(trips);renderHist();
     $('#totTbl').innerHTML=tbl('Driver',grp('driver'),'data-tfset-drv');
   }else if(f.drv&&!f.cust){
     const cm=tot*rateOf(f.drv);
-    $('#totHead').innerHTML=`<h2 style="margin:8px 0 2px">${esc(f.drv)} – customers</h2><p style="color:var(--muted);font-size:13px;margin:0">${lv.length} rides · ${fmtKD(tot)}${f.drv==='Sami'?' · owner':` · Sami 10%: ${fmtKD(cm)} · Driver gets ${fmtKD(tot-cm)}`} · Tap a customer to see only their rides</p>${stmtBtns(f.drv,'d')}`;
+    $('#totHead').innerHTML=`<h2 style="margin:8px 0 2px">${esc(f.drv)} – customers</h2><p style="color:var(--muted);font-size:13px;margin:0">${lv.length} rides · ${fmtKD(tot)}${f.drv==='IBRAHIM'?' · owner':` · IBRAHIM 10%: ${fmtKD(cm)} · Driver gets ${fmtKD(tot-cm)}`} · Tap a customer to see only their rides</p>${stmtBtns(f.drv,'d')}`;
     $('#totTbl').innerHTML=tbl('Customer',grp('customer'),'data-tfset-cust');
   }else{
     $('#totHead').innerHTML=`<h2 style="margin:8px 0 2px">${esc(f.cust)} with ${esc(f.drv)}</h2><p style="color:var(--muted);font-size:13px;margin:0">${lv.length} rides · ${fmtKD(tot)}</p>${stmtBtns(f.cust,'c')}`;
@@ -941,10 +941,10 @@ document.addEventListener('click',e=>{
   const tp=e.target.closest('[data-tfpay]');if(tp){state.tf.pay=state.tf.pay===tp.dataset.tfpay?'':tp.dataset.tfpay;render();return}
   const ts=e.target.closest('[data-tstmt]');if(ts){if(ts.dataset.tstmt==='c')statement(ts.dataset.who);else driverStatement(ts.dataset.who)}
 });
-const OWNER='Sami',COM_RATE=0.10;
+const OWNER='IBRAHIM',COM_RATE=0.10;
 const comPct=n=>{const d=drvOf(n)||{};if(!d.payCom)return 0;const p=d.comPct==null||d.comPct===''?10:+d.comPct;return p>0?p:0};
 const rateOf=n=>comPct(n)/100;const paysCom=n=>comPct(n)>0;
-const samiLbl=n=>`Sami (${fmtN(comPct(n))}%)`;
+const IBRAHIMLbl=n=>`IBRAHIM (${fmtN(comPct(n))}%)`;
 state.cset={};
 const csetId=(n,m)=>`${n.replace(/[^A-Za-z0-9]+/g,'_')}__${m}`;
 async function loadCset(n,m){const id=csetId(n,m);if(state.cset[id]!==undefined)return state.cset[id];try{const g=await state.db.doc('cset/'+id).get();state.cset[id]=g.exists?g.data():null}catch(_){state.cset[id]=null}return state.cset[id]}
@@ -1050,7 +1050,7 @@ function unpPayDialog(n,u){return new Promise(res=>{let dl=document.getElementBy
     <label>Method<select id="upM"><option>Payment link</option><option>WAMD</option><option>Cash</option></select></label><label>Received by<select id="upTo"></select></label></div>
     <p class="help" style="margin:8px 0 4px">Rides paid (oldest first, up to the amount):</p>${u.map(t=>`<label class="check" style="font-size:14px;margin:2px 0"><input type="checkbox" class="upR" data-k="${esc(t.date+'|'+t.id)}" data-a="${+t.amount||0}"> ${dLabel(t.date)} · ${esc(t.from)} → ${esc(t.to)} · ${fmtKD(+t.amount||0)}</label>`).join('')}
     <p id="upSum" style="font-weight:700;margin:6px 0 0"></p><div class="actions"><button class="btn" id="upNo">Cancel</button><button class="btn primary" id="upOk">Save payment</button></div></div>`;
-  const names=[OFFICE,...state.drivers.map(d=>d.name)];dl.querySelector('#upTo').innerHTML=names.map(x=>`<option>${esc(x)}</option>`).join('');dl.querySelector('#upTo').value='Sami';if(!dl.querySelector('#upTo').value)dl.querySelector('#upTo').value=OFFICE;dl.classList.add('open');
+  const names=[OFFICE,...state.drivers.map(d=>d.name)];dl.querySelector('#upTo').innerHTML=names.map(x=>`<option>${esc(x)}</option>`).join('');dl.querySelector('#upTo').value='IBRAHIM';if(!dl.querySelector('#upTo').value)dl.querySelector('#upTo').value=OFFICE;dl.classList.add('open');
   const sum=()=>{const sel=[...dl.querySelectorAll('.upR')].filter(x=>x.checked);const s2=sel.reduce((a,x)=>a+(+x.dataset.a),0);const amt=parseFloat(dl.querySelector('#upAmt').value)||0;const d=Math.round((amt-s2)*1000)/1000;
     const p=dl.querySelector('#upSum');p.textContent=`Ticked: ${sel.length} rides · ${fmtKD(s2)}`+(d===0?' ✓ matches':d>0?` · ${fmtKD(d)} left`:` · ${fmtKD(-d)} more than the payment`);p.style.color=d===0?'var(--ok)':'var(--flag)'};
   const auto=()=>{let left=parseFloat(dl.querySelector('#upAmt').value)||0;dl.querySelectorAll('.upR').forEach(x=>{const a=+x.dataset.a;if(a<=left+1e-9&&left>0){x.checked=true;left-=a}else x.checked=false});sum()};
@@ -1135,9 +1135,9 @@ async function drawComCard(trips,n){const m=state.month;const N=comNums(trips,n)
   const need=N.credit+N.running-N.com+old+TK-GV;const bal=need-paid;if(state.comSel!==n||state.month!==m)return;
   const k=x=>fmtKD(Math.round(x*1000)/1000);const r=(l,v,cls='',b=false)=>`<div class="list-item"><span class="grow ${cls}">${b?'<b>'+l+'</b>':l}</span><span class="${cls}">${b?'<b>'+v+'</b>':v}</span></div>`;
   $('#comCard').innerHTML=`<div class="panel"><h2 style="margin-top:0">${esc(n)} – ${monthLabel(m)}</h2>
-    ${comRow(trips,n,'credit','🔴 Credit',N.credit,k)}${comRow(trips,n,'running','🔵 Running cash',N.running,k)}${comRow(trips,n,'cash','🟢 Cash',N.cash,k)}${r('Total',k(N.total),'',true)}${paysCom(n)?r(samiLbl(n),k(N.com),'kcom'):''}
+    ${comRow(trips,n,'credit','🔴 Credit',N.credit,k)}${comRow(trips,n,'running','🔵 Running cash',N.running,k)}${comRow(trips,n,'cash','🟢 Cash',N.cash,k)}${r('Total',k(N.total),'',true)}${paysCom(n)?r(IBRAHIMLbl(n),k(N.com),'kcom'):''}
     <h3 style="margin:14px 0 4px">Need to pay ${esc(n)}</h3>
-    ${r('Credit',k(N.credit))}${r('+ Running cash',k(N.running))}${paysCom(n)?r('− '+samiLbl(n),'−'+k(N.com),'kcom'):''}
+    ${r('Credit',k(N.credit))}${r('+ Running cash',k(N.running))}${paysCom(n)?r('− '+IBRAHIMLbl(n),'−'+k(N.com),'kcom'):''}
     <div class="list-item"><span class="grow">+ Old balance${doc.oldManual!=null?' (typed)':' (last month)'}</span><span>${k(old)} <button class="btn" data-comold style="padding:4px 8px;font-size:13px">Edit</button></span></div>
     ${TK?r('+ Took from him (not settled)',k(TK)):''}${GV?r('− Gave to him (not settled)','−'+k(GV)):''}
     ${openDebts(n).length?`<details style="margin:2px 0 6px"><summary style="cursor:pointer;color:var(--muted);font-size:14px">Open money with ${esc(n)} (${openDebts(n).length})</summary>${openDebts(n).map(x=>`<div class="list-item" style="font-size:14px"><span class="grow">${x.kind==='gave'?'Gave':'Took'} · ${dLabel(x.date)}${x.method?' · '+esc(x.method):''} · ${esc(x.note||'')}</span><b>${k(+x.amount)}</b><button class="btn" data-debtsettle="${esc(x.id)}" style="padding:4px 8px;font-size:13px">Settled</button></div>`).join('')}</details>`:''}
@@ -1145,7 +1145,7 @@ async function drawComCard(trips,n){const m=state.month;const N=comNums(trips,n)
     <div class="list-item" style="font-size:18px"><span class="grow"><b>= Balance</b></span><b style="color:${bal<0?'var(--danger)':'var(--ok)'}">${k(bal)}</b></div>
     <h3 style="margin:14px 0 4px">Paid to ${esc(n)}</h3>
     ${pays.length?pays.map((p,i)=>`<div class="list-item"><span class="grow">${dLabel(p.date)} · ${esc(p.method)}${p.note?' · '+esc(p.note):''}</span><b>${k(+p.amount)}</b><button class="btn" data-comdel="${i}" style="padding:4px 8px;font-size:13px">×</button></div>`).join(''):'<p class="help">No payments yet.</p>'}
-    <div class="actions"><button class="btn primary" data-comadd>+ Add payment</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 1',[['Credit',k(N.credit)],['Running cash',k(N.running)],['Cash',k(N.cash)],'-',['TOTAL',k(N.total)]]))}">Send part 1</a><a class="wa solid" target="_blank" rel="noopener" data-p2sent="${esc(n)}" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 2',[['Credit',k(N.credit)],['Running cash',k(N.running)],...(paysCom(n)?[[samiLbl(n),'-'+k(N.com)],'-',['Total',k(N.credit+N.running-N.com)]]:['-',['Total',k(N.credit+N.running)]]),['Old balance',k(old)],...(TK?[['Took from you',k(TK)]]:[]),...(GV?[['Given to you','-'+k(GV)]]:[]),'-',['NEED TO PAY',k(need)],...(pays.length?['-','Paid:',...pays.map(p=>[`${(()=>{const x=new Date(p.date+'T00:00');return DAYS[x.getDay()].slice(0,3)+' '+x.getDate()})()} ${p.method==='Payment link'?'Link':p.method}`,'-'+k(+p.amount)]),['Total paid','-'+k(paid)]]:[]),'-',['BALANCE',k(bal)]]))}">Send part 2</a></div></div>`;
+    <div class="actions"><button class="btn primary" data-comadd>+ Add payment</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 1',[['Credit',k(N.credit)],['Running cash',k(N.running)],['Cash',k(N.cash)],'-',['TOTAL',k(N.total)]]))}">Send part 1</a><a class="wa solid" target="_blank" rel="noopener" data-p2sent="${esc(n)}" href="${waLink((drvOf(n)||{}).phone,monoTable(`${n} – ${monthLabel(m)}`,'PART 2',[['Credit',k(N.credit)],['Running cash',k(N.running)],...(paysCom(n)?[[IBRAHIMLbl(n),'-'+k(N.com)],'-',['Total',k(N.credit+N.running-N.com)]]:['-',['Total',k(N.credit+N.running)]]),['Old balance',k(old)],...(TK?[['Took from you',k(TK)]]:[]),...(GV?[['Given to you','-'+k(GV)]]:[]),'-',['NEED TO PAY',k(need)],...(pays.length?['-','Paid:',...pays.map(p=>[`${(()=>{const x=new Date(p.date+'T00:00');return DAYS[x.getDay()].slice(0,3)+' '+x.getDate()})()} ${p.method==='Payment link'?'Link':p.method}`,'-'+k(+p.amount)]),['Total paid','-'+k(paid)]]:[]),'-',['BALANCE',k(bal)]]))}">Send part 2</a></div></div>`;
   state.dset[dsetId(n,m)]={...doc};if(doc.balance!==bal){try{await state.db.doc('dset/'+dsetId(n,m)).set({...doc,driver:n,month:m,balance:Math.round(bal*1000)/1000});state.dset[dsetId(n,m)]={...doc,balance:Math.round(bal*1000)/1000}}catch(_){}}}
 async function saveDset(n,m,fn){const id=dsetId(n,m);const doc={...(await loadDset(n,m)||{}),driver:n,month:m};fn(doc);await state.db.doc('dset/'+id).set(doc);state.dset[id]=doc;render()}
 function payDialog(n){return new Promise(res=>{let dl=document.getElementById('cpDlg');if(!dl){dl=document.createElement('div');dl.className='dlg';dl.id='cpDlg';
@@ -1218,8 +1218,8 @@ function renderDrivers(trips){
       ${paysCom(d.name)?`<b class="kcom">Commission ${fmtN(comPct(d.name))}%</b> · `:''}${d.uid?'<b style="color:var(--ok)">Phone linked</b> · ':''}${d.phone?'WhatsApp saved':'<i>No WhatsApp number</i>'} · ${ts.length} trips this month
       ${(()=>{const ow=lv.filter(t=>hoDue(t)&&t.driver===d.name);const hold=lv.filter(t=>hoDue(t)&&t.paidTo===d.name);const sm=a=>fmtKD(a.reduce((x,t)=>x+(+t.amount||0),0));
         const dd=openDebts(d.name).filter(x=>x.kind!=='gave');const dsum=tookSum(d.name);const dg=openDebts(d.name).filter(x=>x.kind==='gave');
-        const tsc=d.toSami?lv.filter(t=>t.driver===d.name&&!t.paid&&payCat(t)!=='cash'):[];
-        return (dd.length?`<br><b style="color:#7C3AED">Sami owes him: ${fmtKD(dsum)}</b> (${dd.map(x=>esc(x.note)+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(dg.length?`<br><b style="color:var(--ok)">Given to him: ${fmtKD(gaveSum(d.name))}</b> (${dg.map(x=>dLabel(x.date)+' '+esc(x.note||'')+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(d.toSami?`<br><b style="color:var(--flag)">Account settled – his money comes to Sami</b>${tsc.length?` · still to come ${sm(tsc)} (${[...new Set(tsc.map(t=>t.customer))].map(esc).join(', ')})`:''}`:'')+(ow.length?`<br><b style="color:var(--danger)">Not yet paid to him: ${sm(ow)}</b> (${[...new Set(ow.map(t=>t.paidTo===OFFICE?'Sami':t.paidTo))].map(esc).join(', ')} must pay)`:'')+(hold.length?`<br><b style="color:var(--flag)">He holds others’ money: ${sm(hold)}</b>`:'')})()}</div>${photoCard(d)}
+        const tsc=d.toIBRAHIM?lv.filter(t=>t.driver===d.name&&!t.paid&&payCat(t)!=='cash'):[];
+        return (dd.length?`<br><b style="color:#7C3AED">IBRAHIM owes him: ${fmtKD(dsum)}</b> (${dd.map(x=>esc(x.note)+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(dg.length?`<br><b style="color:var(--ok)">Given to him: ${fmtKD(gaveSum(d.name))}</b> (${dg.map(x=>dLabel(x.date)+' '+esc(x.note||'')+' '+fmtKD(+x.amount)).join(' · ')})`:'')+(d.toIBRAHIM?`<br><b style="color:var(--flag)">Account settled – his money comes to IBRAHIM</b>${tsc.length?` · still to come ${sm(tsc)} (${[...new Set(tsc.map(t=>t.customer))].map(esc).join(', ')})`:''}`:'')+(ow.length?`<br><b style="color:var(--danger)">Not yet paid to him: ${sm(ow)}</b> (${[...new Set(ow.map(t=>t.paidTo===OFFICE?'IBRAHIM':t.paidTo))].map(esc).join(', ')} must pay)`:'')+(hold.length?`<br><b style="color:var(--flag)">He holds others’ money: ${sm(hold)}</b>`:'')})()}</div>${photoCard(d)}
       ${dayTs.length?`<details style="margin-top:6px"><summary style="cursor:pointer;color:var(--muted);font-size:14px">See rides</summary>${dayTs.map(t=>{const pc=payCat(t);const c=pc!=='credit';return `<div class="list-item ride ${pc==='cash'?'rcash':pc==='running'?'rrun':'rcred'}" style="font-size:14px"><span class="grow">${isM?dLabel(t.date)+' · ':''}${t12(t.time)} · <b>${esc(t.customer)}</b><br><span style="color:var(--muted)">${esc(t.from)} → ${esc(t.to)}</span></span><span style="text-align:right"><b class="ramt">${t.amount==null?'–':fmtKD(+t.amount)}</b><br><span class="tag">${CAT[pc].l}</span></span></div>`}).join('')}</details>`:''}
       <div class="acts"><button class="btn" data-editdrv="${i}">Edit details</button><button class="btn" data-dtook="${esc(d.name)}">Took money</button><button class="btn" data-dgave="${esc(d.name)}">Gave money</button>${(d.photos||[]).length?`<button class="btn" data-view="${esc(d.photos[0])}" data-vdrv="${esc(d.name)}">Car photo</button>`:''}
       ${d.token?`<a class="wa" target="_blank" rel="noopener" href="${waLink(d.phone,`Hi ${d.name}, your rides are here (open while signed in to Claude). Keep this link private:\n${APP_URL}#d-${d.token}\n\nIf it asks, your rides code is: ${d.token}`)}">Send his rides link</a>`:`<button class="btn" data-mklink="${i}">Create driver link</button>`}</div></div>`})()).join(''):'<div class="empty"><b>No drivers found</b>Try another name or add a driver.</div>';
@@ -1664,9 +1664,9 @@ $('#fDrvGot').addEventListener('change',()=>{if($('#fDrvGot').checked){if(!$('#f
 $('#fDrv').addEventListener('change',syncDrvGot);
 function syncPaidBox(){try{syncDrvGot()}catch(_){}const v=$('#fPayS').value;const p=!!v&&v!=='credit';$('#fPaid').checked=p;if(p)$('#fPayM').value=v;$('#paidBox').hidden=!p;$('#fPayToLbl').textContent=v==='Payment link'?'Link sent by':'Money received by'}
 const HA=v=>state.showAmt?v:'XXX';
-function recvEntries(trips){const m=state.month;const rn=x=>!x||x===OFFICE?'Sami':x;const covered=new Set();const out=[];
-  Object.values(state.cset||{}).filter(d=>d&&d.month===m).forEach(d=>(d.payments||[]).forEach(p=>{(p.rides||[]).forEach(k=>covered.add(k));if(+p.amount>0)out.push({customer:d.customer,amount:+p.amount,date:p.date,method:p.method,type:'credit',to:'Sami',note:p.note||'',rides:(p.rides||[]).length,kind:'monthly'})}));
-  trips.filter(t=>t.status==='done'&&!t.own&&t.paid&&!covered.has(t.date+'|'+t.id)).forEach(t=>{const to=rn(t.paidTo);const type=t.payType&&t.payType!=='credit'?t.payType:'credit';const dv=t.driver||'';out.push({customer:t.customer,amount:+t.amount||0,date:t.paidOn||t.date,method:t.paidBy||t.payType||'',type,to,note:'',rides:1,ride:t,kind:type==='credit'?'monthly':(dv===to||(!dv&&to==='Sami'))?'own':'for',forDrv:dv})});
+function recvEntries(trips){const m=state.month;const rn=x=>!x||x===OFFICE?'IBRAHIM':x;const covered=new Set();const out=[];
+  Object.values(state.cset||{}).filter(d=>d&&d.month===m).forEach(d=>(d.payments||[]).forEach(p=>{(p.rides||[]).forEach(k=>covered.add(k));if(+p.amount>0)out.push({customer:d.customer,amount:+p.amount,date:p.date,method:p.method,type:'credit',to:'IBRAHIM',note:p.note||'',rides:(p.rides||[]).length,kind:'monthly'})}));
+  trips.filter(t=>t.status==='done'&&!t.own&&t.paid&&!covered.has(t.date+'|'+t.id)).forEach(t=>{const to=rn(t.paidTo);const type=t.payType&&t.payType!=='credit'?t.payType:'credit';const dv=t.driver||'';out.push({customer:t.customer,amount:+t.amount||0,date:t.paidOn||t.date,method:t.paidBy||t.payType||'',type,to,note:'',rides:1,ride:t,kind:type==='credit'?'monthly':(dv===to||(!dv&&to==='IBRAHIM'))?'own':'for',forDrv:dv})});
   return out}
 function renderRecv(trips){preloadCset();const all=recvEntries(trips);const recvs=[...new Set(all.map(e=>e.to))].sort((a,b)=>a.localeCompare(b));
   const sel=$('#prRecv');const cur=state.prRecv||'';sel.innerHTML='<option value="">All</option>'+recvs.map(r=>`<option ${r===cur?'selected':''}>${esc(r)}</option>`).join('');$('#prType').value=state.prType||'';
@@ -1674,22 +1674,22 @@ function renderRecv(trips){preloadCset();const all=recvEntries(trips);const recv
   const L=all.filter(e=>(!cur||e.to===cur)&&(!state.prType||e.type===state.prType||(state.prType!=='credit'&&e.method===state.prType))&&(!pq||e.customer.toLowerCase().includes(pq)));
   const sum=a=>a.reduce((x,e)=>x+e.amount,0);$('#sumRecv').innerHTML=`<b>${L.length?[...new Set(L.map(e=>e.customer))].length:0}</b> customers · ${HA(fmtKD(sum(L)))}`;
   const G={};L.forEach(e=>{const k=e.customer+'|'+e.to+'|'+e.kind;(G[k]=G[k]||[]).push(e)});const keys=Object.keys(G).sort((a,b)=>a.localeCompare(b));state.prOpen=state.prOpen||{};
-  const byR={};L.forEach(e=>byR[e.to]=(byR[e.to]||0)+e.amount);const sami=byR.Sami||0;const drv=Object.entries(byR).filter(([r])=>r!=='Sami');
+  const byR={};L.forEach(e=>byR[e.to]=(byR[e.to]||0)+e.amount);const IBRAHIM=byR.IBRAHIM||0;const drv=Object.entries(byR).filter(([r])=>r!=='IBRAHIM');
   state.prRows=keys.map(k=>{const es=G[k];const ds=es.map(e=>e.date).sort();return {customer:es[0].customer,to:es[0].to,kind:es[0].kind,fors:[...new Set(es.filter(e=>e.kind==='for').map(e=>e.forDrv))],total:sum(es),methods:[...new Set(es.map(e=>e.method==='Payment link'?'Link':e.method).filter(Boolean))].join(', '),from:ds[0],till:ds[ds.length-1],n:es.reduce((x,e)=>x+e.rides,0),es}});
-  const SE=L.filter(e=>e.to==='Sami');const kb=k=>SE.filter(e=>e.kind===k);const lst=(a,f)=>{const g={};a.forEach(e=>{const kk=f(e);g[kk]=(g[kk]||0)+e.amount});return Object.entries(g).map(([kk,v])=>esc(kk)+' '+fmtKD(v)).join(' · ')};
+  const SE=L.filter(e=>e.to==='IBRAHIM');const kb=k=>SE.filter(e=>e.kind===k);const lst=(a,f)=>{const g={};a.forEach(e=>{const kk=f(e);g[kk]=(g[kk]||0)+e.amount});return Object.entries(g).map(([kk,v])=>esc(kk)+' '+fmtKD(v)).join(' · ')};
   const forG={};kb('for').forEach(e=>{(forG[e.customer]=forG[e.customer]||{})[e.forDrv]=(forG[e.customer][e.forDrv]||0)+e.amount});
-  const box=SE.length&&(!cur||cur==='Sami')?`<div class="panel" style="margin-bottom:8px"><b>Received by Sami – ${monthLabel(state.month)}: ${HA(fmtKD(sum(SE)))}</b>
-    <div style="margin-top:6px"><b class="kcash">🟢 Sami’s own rides · ${HA(fmtKD(sum(kb('own'))))}</b><br><span class="help">${lst(kb('own'),e=>e.customer)||'–'}</span></div>
+  const box=SE.length&&(!cur||cur==='IBRAHIM')?`<div class="panel" style="margin-bottom:8px"><b>Received by IBRAHIM – ${monthLabel(state.month)}: ${HA(fmtKD(sum(SE)))}</b>
+    <div style="margin-top:6px"><b class="kcash">🟢 IBRAHIM’s own rides · ${HA(fmtKD(sum(kb('own'))))}</b><br><span class="help">${lst(kb('own'),e=>e.customer)||'–'}</span></div>
     <div style="margin-top:6px"><b class="kcred">🔴 Monthly payments (credit) · ${HA(fmtKD(sum(kb('monthly'))))}</b><br><span class="help">${lst(kb('monthly'),e=>e.customer)||'–'} · belongs to the drivers who did the rides – settled in Commission</span></div>
     <div style="margin-top:6px"><b class="krun">🔵 Running cash for other drivers · ${HA(fmtKD(sum(kb('for'))))}</b><br><span class="help">${Object.entries(forG).map(([c,o])=>esc(c)+' → '+Object.entries(o).map(([d,v])=>esc(d)+' '+fmtKD(v)).join(', ')).join(' · ')||'–'}${kb('for').length?' · pay these drivers (Payments ③)':''}</span></div></div>`:'';
-  state.prSamiBox={own:sum(kb('own')),monthly:sum(kb('monthly')),forO:sum(kb('for')),all:sum(SE)};
+  state.prIBRAHIMBox={own:sum(kb('own')),monthly:sum(kb('monthly')),forO:sum(kb('for')),all:sum(SE)};
   $('#recvList').innerHTML=box+(keys.length?state.prRows.map((r,i)=>{const k=keys[i];const op=!!state.prOpen[k];
     return `<div class="lgroup"><div class="lgrow"><span class="grow"><b>${esc(r.customer)}</b> · <b>${fmtKD(r.total)}</b><br><span style="color:var(--muted);font-size:13px">${esc(r.methods)} · ${dLabel(r.from)}${r.till!==r.from?' – '+dLabel(r.till):''} · received by <b style="color:var(--ink)">${esc(r.to)}</b> ${kindBadge(r)}</span></span><button class="btn" data-prdet="${esc(k)}">${op?'Hide':'Details'}</button></div>
       ${op?`<div class="lgdet">${r.es.map(e=>`<div class="list-item" style="font-size:13.5px"><span class="grow">${dLabel(e.date)} · ${esc(e.method==='Payment link'?'Link':e.method)}${e.ride?` · ${esc(e.ride.from)} → ${esc(e.ride.to)} (${dLabel(e.ride.date)})`:` · statement payment${e.rides?' · '+e.rides+' rides':''}${e.note?' · '+esc(e.note):''}`}</span><b>${fmtKD(e.amount)}</b></div>`).join('')}</div>`:''}</div>`}).join('')+
-    `<div class="lgtotal">Received by Sami: <b>${HA(fmtKD(sami))}</b> · by drivers: <b>${HA(fmtKD(drv.reduce((x,[,v])=>x+v,0)))}</b>${drv.length?`<br><span style="font-size:13px;color:var(--muted)">${drv.sort((a,b)=>a[0].localeCompare(b[0])).map(([r,v])=>esc(r)+' '+fmtKD(v)).join(' · ')}</span>`:''}</div>
-    <div class="actions"><button class="btn" data-prxls>Download Excel</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink('',monoTable(`Payments received – ${monthLabel(state.month)}`,cur?'Received by '+cur:'All receivers',[...state.prRows.map(r=>[`${r.customer} (${r.to}${r.kind==='monthly'?', monthly':r.kind==='for'?', for '+r.fors.join('/'):''})`,fmtKD(r.total)]),'-',['Sami own rides',fmtKD(state.prSamiBox.own)],['Sami monthly',fmtKD(state.prSamiBox.monthly)],['Sami for drivers',fmtKD(state.prSamiBox.forO)],['Sami total',fmtKD(sami)],...drv.map(([n,v])=>[n,fmtKD(v)]),'-',['TOTAL',fmtKD(sum(L))]]))}">Send on WhatsApp</a></div>`
+    `<div class="lgtotal">Received by IBRAHIM: <b>${HA(fmtKD(IBRAHIM))}</b> · by drivers: <b>${HA(fmtKD(drv.reduce((x,[,v])=>x+v,0)))}</b>${drv.length?`<br><span style="font-size:13px;color:var(--muted)">${drv.sort((a,b)=>a[0].localeCompare(b[0])).map(([r,v])=>esc(r)+' '+fmtKD(v)).join(' · ')}</span>`:''}</div>
+    <div class="actions"><button class="btn" data-prxls>Download Excel</button><a class="wa solid" target="_blank" rel="noopener" href="${waLink('',monoTable(`Payments received – ${monthLabel(state.month)}`,cur?'Received by '+cur:'All receivers',[...state.prRows.map(r=>[`${r.customer} (${r.to}${r.kind==='monthly'?', monthly':r.kind==='for'?', for '+r.fors.join('/'):''})`,fmtKD(r.total)]),'-',['IBRAHIM own rides',fmtKD(state.prIBRAHIMBox.own)],['IBRAHIM monthly',fmtKD(state.prIBRAHIMBox.monthly)],['IBRAHIM for drivers',fmtKD(state.prIBRAHIMBox.forO)],['IBRAHIM total',fmtKD(IBRAHIM)],...drv.map(([n,v])=>[n,fmtKD(v)]),'-',['TOTAL',fmtKD(sum(L))]]))}">Send on WhatsApp</a></div>`
     :'<p class="help">No payments received for these filters.</p>')}
-function kindBadge(r){return r.kind==='own'?`<span class="pill full" style="margin:0">${r.to==='Sami'?'Sami’s ride':'Own ride'}</span>`:r.kind==='monthly'?'<span class="pill" style="margin:0;background:#B4231818;color:var(--danger)">Monthly</span>':`<span class="pill" style="margin:0;background:#2563EB1f;color:#2563EB">For ${esc(r.fors.join(', '))}</span>`}
+function kindBadge(r){return r.kind==='own'?`<span class="pill full" style="margin:0">${r.to==='IBRAHIM'?'IBRAHIM’s ride':'Own ride'}</span>`:r.kind==='monthly'?'<span class="pill" style="margin:0;background:#B4231818;color:var(--danger)">Monthly</span>':`<span class="pill" style="margin:0;background:#2563EB1f;color:#2563EB">For ${esc(r.fors.join(', '))}</span>`}
 document.addEventListener('click',async e=>{const d=e.target.closest('[data-prdet]');if(d){state.prOpen=state.prOpen||{};state.prOpen[d.dataset.prdet]=!state.prOpen[d.dataset.prdet];render();return}
   if(e.target.closest('[data-prxls]')){if(typeof XLSX==='undefined'){toast('Excel is still loading');return}const rows=[[`Payments received – ${monthLabel(state.month)}`],[],['Customer','Received by','Kind','Method','Date','Details','Amount (KD)']];
     (state.prRows||[]).forEach(r=>r.es.forEach(x=>rows.push([r.customer,r.to,x.kind==='own'?'Own ride':x.kind==='monthly'?'Monthly (credit)':'For '+x.forDrv,x.method,x.date,x.ride?`${x.ride.from} → ${x.ride.to} (${x.ride.date})`:`Statement payment${x.note?' – '+x.note:''}`,x.amount])));
@@ -1700,7 +1700,7 @@ function renderPay(trips){renderRecv(trips);
   const pq=($('#payQ').value||'').trim().toLowerCase();const mq=n=>!pq||String(n||'').toLowerCase().includes(pq);
   const pf=state.pf||'';document.querySelectorAll('[data-pf]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.pf===pf?'true':'false'));
   const lv=trips.filter(live);const nc=lv.filter(t=>t.payType&&t.payType!=='credit'&&(!pf||t.payType===pf));
-  const kd=a=>fmtKD(a.reduce((x,t)=>x+(+t.amount||0),0));const who=n=>n===OFFICE?'Sami (office)':n;
+  const kd=a=>fmtKD(a.reduce((x,t)=>x+(+t.amount||0),0));const who=n=>n===OFFICE?'IBRAHIM (office)':n;
   // waiting
   const waitLink=nc.filter(t=>t.payType==='Payment link'&&!t.paid);const waitOther=nc.filter(t=>t.payType!=='Payment link'&&!t.paid);
   const ho=nc.filter(hoDue).filter(t=>mq(t.customer)||mq(t.driver)||mq(t.paidTo));const done=nc.filter(isComplete).filter(t=>mq(t.customer)||mq(t.driver));
@@ -1712,7 +1712,7 @@ function renderPay(trips){renderRecv(trips);
   const wo=waitOther.filter(t=>mq(t.customer)||mq(t.driver));
   state.cwSel=state.cwSel||{};state.cwOpen=state.cwOpen||{};const cwk=t=>t.date+'|'+t.id;const cwN=wo.filter(t=>state.cwSel[cwk(t)]);
   const CG={};wo.forEach(t=>(CG[t.customer]=CG[t.customer]||[]).push(t));const cn=Object.keys(CG).sort((a,b)=>a.localeCompare(b));
-  const rideRow=t=>`<div class="lrsel"><input type="checkbox" class="cwchk" data-cw="${esc(cwk(t))}" ${state.cwSel[cwk(t)]?'checked':''} aria-label="Confirm ride"><div class="list-item ride ${t.payType==='Cash'?'rcashw':'rrun'}" data-openlk="${esc(cwk(t))}" role="button" style="cursor:pointer;font-size:14px"><span class="grow">${dLabel(t.date)} ${t12(t.time)} <span class="pill ${t.payType==='Cash'?'cashp':'wamdp'}" style="margin:0 0 0 4px">${esc(t.payType==='Cash'?'CASH':t.payType)}</span><br><span style="color:var(--muted)">Driver ${esc(t.driver||'—')} → customer${t.payTo&&t.payTo!==t.driver?' · money to '+esc(t.payTo===OFFICE?'Sami':t.payTo):''}</span></span><b class="ramt">${fmtKD(+t.amount||0)}</b></div></div>`;
+  const rideRow=t=>`<div class="lrsel"><input type="checkbox" class="cwchk" data-cw="${esc(cwk(t))}" ${state.cwSel[cwk(t)]?'checked':''} aria-label="Confirm ride"><div class="list-item ride ${t.payType==='Cash'?'rcashw':'rrun'}" data-openlk="${esc(cwk(t))}" role="button" style="cursor:pointer;font-size:14px"><span class="grow">${dLabel(t.date)} ${t12(t.time)} <span class="pill ${t.payType==='Cash'?'cashp':'wamdp'}" style="margin:0 0 0 4px">${esc(t.payType==='Cash'?'CASH':t.payType)}</span><br><span style="color:var(--muted)">Driver ${esc(t.driver||'—')} → customer${t.payTo&&t.payTo!==t.driver?' · money to '+esc(t.payTo===OFFICE?'IBRAHIM':t.payTo):''}</span></span><b class="ramt">${fmtKD(+t.amount||0)}</b></div></div>`;
   $('#cashWait').innerHTML=wo.length?`<div class="lbulk"><label class="check"><input type="checkbox" id="cwAll" ${cwN.length===wo.length?'checked':''}> Select all</label><span><b>${cwN.length}</b> selected · <b>${fmtKD(cwN.reduce((x,t)=>x+(+t.amount||0),0))}</b></span><button class="btn primary" id="cwGo" ${cwN.length?'':'disabled'}>Confirm (${cwN.length})</button></div>`+
     cn.map(c=>{const ts=CG[c];const all=ts.every(t=>state.cwSel[cwk(t)]);const op=!!state.cwOpen[c];const types=[...new Set(ts.map(t=>t.payType))];
       return `<div class="lgroup"><div class="lgrow"><input type="checkbox" class="cwcust" data-cwc="${esc(c)}" ${all?'checked':''} aria-label="Select ${esc(c)}"><span class="grow"><b>${esc(c)}</b> · <b>${fmtKD(ts.reduce((x,t)=>x+(+t.amount||0),0))}</b><br><span style="color:var(--muted);font-size:13px">${ts.length} ride${ts.length>1?'s':''} ${types.map(p=>`<span class="pill ${p==='Cash'?'cashp':'wamdp'}" style="margin:0 2px">${esc(p==='Cash'?'CASH':p)}</span>`).join('')}</span></span><button class="btn" data-cwdet="${esc(c)}">${op?'Hide':'Details'}</button></div>${op?`<div class="lgdet">${ts.map(rideRow).join('')}</div>`:''}</div>`}).join('')+
@@ -1723,7 +1723,7 @@ function renderPay(trips){renderRecv(trips);
   const H={};ho.forEach(t=>{const h=t.paidTo;H[h]=H[h]||{};(H[h][t.driver]=H[h][t.driver]||[]).push(t)});
   const hk=Object.keys(H).sort((a,b)=>a.localeCompare(b));state.hoOpen=state.hoOpen||{};
   const DB=(state.debts||[]).filter(x=>!x.paid&&(!pq||mq(x.driver)));const DG={};DB.forEach(x=>{(DG[x.driver]=DG[x.driver]||[]).push(x)});const dk=Object.keys(DG).sort((a,b)=>a.localeCompare(b));
-  const debtHtml=dk.length?`<div class="lgroup howarn" style="border-left-color:#7C3AED"><div class="lgrow"><span class="grow"><b>Sami</b> owes <b style="color:#7C3AED">${fmtKD(DB.reduce((a,x)=>a+(x.kind==='gave'?-1:1)*(+x.amount||0),0))}</b> (notebook / loans)<br><span style="color:var(--muted);font-size:13px">${dk.length} driver${dk.length>1?'s':''}: ${dk.map(esc).join(', ')}</span></span><button class="btn" data-hodet="__debts">${(state.hoOpen||{}).__debts?'Hide':'Details'}</button></div>
+  const debtHtml=dk.length?`<div class="lgroup howarn" style="border-left-color:#7C3AED"><div class="lgrow"><span class="grow"><b>IBRAHIM</b> owes <b style="color:#7C3AED">${fmtKD(DB.reduce((a,x)=>a+(x.kind==='gave'?-1:1)*(+x.amount||0),0))}</b> (notebook / loans)<br><span style="color:var(--muted);font-size:13px">${dk.length} driver${dk.length>1?'s':''}: ${dk.map(esc).join(', ')}</span></span><button class="btn" data-hodet="__debts">${(state.hoOpen||{}).__debts?'Hide':'Details'}</button></div>
     ${(state.hoOpen||{}).__debts?`<div class="lgdet">${dk.map(d=>{const xs=DG[d];return `<div class="list-item" style="font-size:14px"><span class="grow">Pay <b>${esc(d)}</b> · <b>${fmtKD(xs.reduce((a,x)=>a+(x.kind==='gave'?-1:1)*(+x.amount||0),0))}</b><br><span style="color:var(--muted)">${xs.map(x=>`${x.kind==='gave'?'− given ':''}${esc(x.note)} ${fmtKD(+x.amount)}`).join(' · ')}</span></span><button class="btn primary" data-debtpay="${esc(d)}">Paid to ${esc(d)}</button></div>`}).join('')}</div>`:''}</div>`:'';
   $('#hoList').innerHTML=debtHtml+(hk.length?hk.map(h=>{const ds=Object.keys(H[h]).sort((a,b)=>a.localeCompare(b));const all=ds.flatMap(d=>H[h][d]);const op=!!state.hoOpen[h];
     return `<div class="lgroup howarn"><div class="lgrow"><span class="grow"><b>${esc(who(h))}</b> received <b style="color:var(--danger)">${fmtKD(all.reduce((x,t)=>x+(+t.amount||0),0))}</b><br><span style="color:var(--muted);font-size:13px">to pay ${ds.length} driver${ds.length>1?'s':''}: ${ds.map(esc).join(', ')}</span></span><button class="btn" data-hodet="${esc(h)}">${op?'Hide':'Details'}</button></div>
@@ -1755,16 +1755,16 @@ document.addEventListener('click',async e=>{
     if(!(await askConfirm(`Confirm ${keys.length} ride${keys.length>1?'s':''}: the money was received?`,'Confirm')))return;
     await lkApply(keys,x=>{x.paid=true;x.paidBy=x.payType;x.paidTo=x.payTo||x.driver||OFFICE;x.paidOn=today();x.status='done';x.check=false},'Confirmed ✓');keys.forEach(k=>delete state.cwSel[k]);render();return}
   const dt=e.target.closest('[data-dtook],[data-dgave]');if(dt){const took=!!dt.dataset.dtook;const n=dt.dataset.dtook||dt.dataset.dgave;const p=await payDialog(n);if(!p)return;
-    try{await state.db.doc('debts/'+rid()).set({driver:n,amount:p.amount,date:p.date,method:p.method,note:p.note||(took?'Took':'Given'),kind:took?'took':'gave',paid:false});toast(took?`Saved – Sami owes ${n} ${fmtKD(p.amount)}`:`Saved – given to ${n} ${fmtKD(p.amount)}`)}catch(err){writeFailed(err)}return}
+    try{await state.db.doc('debts/'+rid()).set({driver:n,amount:p.amount,date:p.date,method:p.method,note:p.note||(took?'Took':'Given'),kind:took?'took':'gave',paid:false});toast(took?`Saved – IBRAHIM owes ${n} ${fmtKD(p.amount)}`:`Saved – given to ${n} ${fmtKD(p.amount)}`)}catch(err){writeFailed(err)}return}
   const dse=e.target.closest('[data-debtsettle]');if(dse){if(!(await askConfirm('Mark this as settled?','Settled')))return;try{await state.db.doc('debts/'+dse.dataset.debtsettle).update({paid:true,paidOn:today()});toast('Settled ✓')}catch(err){writeFailed(err)}return}
   const dp=e.target.closest('[data-debtpay]');if(dp){const d=dp.dataset.debtpay;const xs=(state.debts||[]).filter(x=>!x.paid&&x.driver===d);const tot=xs.reduce((a,x)=>a+(x.kind==='gave'?-1:1)*(+x.amount||0),0);
-    if(!(await askConfirm(`Sami paid ${fmtKD(tot)} to ${d}?`,`Yes, paid to ${d}`)))return;try{for(const x of xs)await state.db.doc('debts/'+x.id).update({paid:true,paidOn:today()});toast(`Paid to ${d} ✓`)}catch(err){writeFailed(err)}return}
+    if(!(await askConfirm(`IBRAHIM paid ${fmtKD(tot)} to ${d}?`,`Yes, paid to ${d}`)))return;try{for(const x of xs)await state.db.doc('debts/'+x.id).update({paid:true,paidOn:today()});toast(`Paid to ${d} ✓`)}catch(err){writeFailed(err)}return}
   const hd=e.target.closest('[data-hodet]');if(hd){state.hoOpen=state.hoOpen||{};state.hoOpen[hd.dataset.hodet]=!state.hoOpen[hd.dataset.hodet];render();return}
   const dd=e.target.closest('[data-donedet]');if(dd){state.doneOpen=state.doneOpen||{};state.doneOpen[dd.dataset.donedet]=!state.doneOpen[dd.dataset.donedet];render();return}
   const hdo=e.target.closest('[data-hodo]');if(hdo){const k=hdo.dataset.hodo;const[h,d]=k.split('→');
     const ts=allTrips().filter(t=>live(t)&&hoDue(t)&&t.paidTo===h&&t.driver===d&&(!state.pf||t.payType===state.pf));if(!ts.length)return;
     const tot=ts.reduce((x,t)=>x+(+t.amount||0),0);
-    if(!(await askConfirm(`${h===OFFICE?'Sami':h} paid ${fmtKD(tot)} to ${d}? (${ts.length} ride${ts.length>1?'s':''})`,`Yes, paid to ${d}`)))return;
+    if(!(await askConfirm(`${h===OFFICE?'IBRAHIM':h} paid ${fmtKD(tot)} to ${d}? (${ts.length} ride${ts.length>1?'s':''})`,`Yes, paid to ${d}`)))return;
     await lkApply(ts.map(t=>t.date+'|'+t.id),x=>{x.handedOver=true;x.handedOn=today()},'Handed over – rides Complete ✓');render()}
 });
 function moneyRides(n,got){return got.filter(t=>t.paidTo===n)}
@@ -1784,7 +1784,7 @@ function renderLinks(lv,mq){
   const row=t=>{const k=esc(t.date+'|'+t.id);const mism=t.paid&&t.paidTo&&t.driver&&t.paidTo!==t.driver;
     const cls=t.paid?'rcash':t.linkFailed?'rfail':'rcred';
     return `<div class="list-item linkrow2 ${cls}"><span class="grow" data-openlk="${k}" role="button" tabindex="0" style="cursor:pointer"><b>${esc(t.customer)}</b> · ${fmtKD(+t.amount||0)} ${doneBadge(t)}<br>
-      <span style="color:var(--muted);font-size:13px">${dLabel(t.date)} ${t12(t.time)} · ride by ${esc(t.driver||'—')}${t.linkSentBy?`<br>Link sent by ${esc(t.linkSentBy)}${t.linkSentOn?' on '+dLabel(t.linkSentOn):''}${!t.paid&&t.driver&&t.linkSentBy!==t.driver?`<br><b style="color:var(--flag)">Money will go to ${esc(t.linkSentBy===OFFICE?'Sami':t.linkSentBy)} → must give to ${esc(t.driver)}</b>`:''}`:(t.paid?'':'<br><b style="color:var(--flag)">Link not sent yet</b>')}<br><span class="editlk">Tap to edit ›</span></span>
+      <span style="color:var(--muted);font-size:13px">${dLabel(t.date)} ${t12(t.time)} · ride by ${esc(t.driver||'—')}${t.linkSentBy?`<br>Link sent by ${esc(t.linkSentBy)}${t.linkSentOn?' on '+dLabel(t.linkSentOn):''}${!t.paid&&t.driver&&t.linkSentBy!==t.driver?`<br><b style="color:var(--flag)">Money will go to ${esc(t.linkSentBy===OFFICE?'IBRAHIM':t.linkSentBy)} → must give to ${esc(t.driver)}</b>`:''}`:(t.paid?'':'<br><b style="color:var(--flag)">Link not sent yet</b>')}<br><span class="editlk">Tap to edit ›</span></span>
       ${t.paid?`<br><span style="font-size:13px;font-weight:600;color:${mism?'var(--flag)':'var(--ok)'}">Paid ${t.paidOn?dLabel(t.paidOn):''} · received by ${esc(t.paidTo||'—')}${mism?' (not the ride driver)':''}</span>`:''}
       ${t.linkFailed&&!t.paid?`<br><span style="font-size:13px;font-weight:700;color:var(--danger)">Payment failed${t.failedOn?' '+dLabel(t.failedOn):''} – send the link again</span>`:linkExpired(t)?`<br><span style="font-size:13px;font-weight:700;color:var(--danger)">Link expired (24 hours) – send a new link</span>`:''}</span>
       <span class="lbtns">${t.paid?`<button class="btn" data-linkundo="${k}">Undo</button>`:
@@ -1987,7 +1987,7 @@ function driverStatement(name){const f=stmtFilter();state.stmtFor={type:'d',name
   ts.forEach(t=>S[totCat(t)]+=(+t.amount||0));const T=S.cash+S.running+S.credit;
   let s=`${name} – ${monthLabel(state.month)}${fLbl(f)}\n\nSUMMARY\n${ts.length} rides · Total ${fmtKD(T)}\n`;
   ['cash','running','credit'].forEach(k=>{if(!f||f===k)s+=`${CAT[k].e} ${CAT[k].l} ${fmtKD(S[k])}\n`});
-  if(paysCom(name)){const cm=T*rateOf(name);s+=`${samiLbl(name)}: ${fmtKD(cm)} · You get: ${fmtKD(T-cm)}\n`}
+  if(paysCom(name)){const cm=T*rateOf(name);s+=`${IBRAHIMLbl(name)}: ${fmtKD(cm)} · You get: ${fmtKD(T-cm)}\n`}
   s+=`\nRIDES${!f?'  (🟢 Cash  🔵 Running cash  🔴 Credit)':''}\n`;let last='';
   ts.forEach(t=>{const a=+t.amount||0;if(t.date!==last){s+=`\n${dLabel(t.date)}\n`;last=t.date}
     s+=`${CAT[totCat(t)].e} ${t12(t.time)}  ${t.customer}: ${t.from} → ${t.to}  ${t.amount==null?'price pending':fmtKD(a)}\n`});
@@ -2180,7 +2180,7 @@ $('#tkRead').onclick=async()=>{const btn=$('#tkRead');btn.disabled=true;btn.text
       r.names.forEach(n=>{if(!g.names.some(x=>x.name===n.name))g.names.push(n)});if(r.bagPer!=null)g.bags+=r.bagPer*Math.max(1,r.names.filter(n=>n.tag!=='INF').length)})});
     const list=Object.values(G).sort((a,b)=>(a.date+(a.arr||'')).localeCompare(b.date+(b.arr||'')));
     if(!list.length){const sample=texts.join(' ').replace(/\s+/g,' ').trim();
-      $('#tkOut').innerHTML=`<p style="color:var(--danger);font-weight:700">Could not find a flight in this ticket.</p>`+(sample.length<20?`<p class="help">This PDF has no readable text (it is a scanned picture). Open it, take a screenshot, and use “Paste ticket / screenshot text”, or send it to Sami’s Claude chat.</p>`:`<p class="help">The app read this text but did not recognise the format. Send the ticket to Claude once so it can learn it:</p><div style="font-size:12px;max-height:120px;overflow:auto;border:1px dashed var(--line);border-radius:8px;padding:6px">${esc(sample.slice(0,600))}</div>`);
+      $('#tkOut').innerHTML=`<p style="color:var(--danger);font-weight:700">Could not find a flight in this ticket.</p>`+(sample.length<20?`<p class="help">This PDF has no readable text (it is a scanned picture). Open it, take a screenshot, and use “Paste ticket / screenshot text”, or send it to IBRAHIM’s Claude chat.</p>`:`<p class="help">The app read this text but did not recognise the format. Send the ticket to Claude once so it can learn it:</p><div style="font-size:12px;max-height:120px;overflow:auto;border:1px dashed var(--line);border-radius:8px;padding:6px">${esc(sample.slice(0,600))}</div>`);
       $('#tkOut').scrollIntoView({behavior:'smooth',block:'start'});return}
     state.tk=list;renderTk();setTimeout(()=>$('#tkOut').scrollIntoView({behavior:'smooth',block:'start'}),50)}catch(e){toast(e&&e.message==='pdf'?'PDF reader still loading – try again':'Could not read this file')}finally{btn.disabled=false;btn.textContent='Read ticket'}};
 function renderTk(){const yd=yday();
@@ -2244,7 +2244,7 @@ state.hideTot=true;try{state.hideTot=localStorage.getItem('hideTot')!=='0'}catch
 function syncTotEye(){$('#v-totals').classList.toggle('hidenums',state.hideTot);const open='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>';const closed='<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 10c2.5 3 6 5 10 5s7.5-2 10-5"/><path d="M5 13.5 3 16M9.5 15 8.5 18M14.5 15l1 3M19 13.5l2 2.5"/></svg>';$('#totEye').innerHTML=state.hideTot?closed:open;$('#totEye').title=state.hideTot?'Show numbers':'Hide numbers'}
 $('#totEye').onclick=()=>{state.hideTot=!state.hideTot;try{localStorage.setItem('hideTot',state.hideTot?'1':'0')}catch(_){}syncTotEye()};syncTotEye();
 async function readAllDocs(col){const out={};const snap=await state.db.collection(col).limit(1000).get();snap.docs.forEach(d=>out[d.id]=d.data());return out}
-async function collectBackup(){const data={app:'Sami Taxi',app_link:APP_URL,backup_date:today(),collections:{}};
+async function collectBackup(){const data={app:'IBRAHIM Taxi',app_link:APP_URL,backup_date:today(),collections:{}};
   for(const c of ['days','payments','settles'])data.collections[c]=await readAllDocs(c);
   data.collections.config={};for(const k of ['customers','drivers','routes','schedules']){const d=await state.db.doc('config/'+k).get();if(d.exists)data.collections.config[k]=d.data()}
   return data}
@@ -2256,13 +2256,13 @@ function backupXlsx(data){const wb=XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(cu),'Customers');
   const dr=[['Name','Plate','Phone','Car','Civil ID','Code']];((data.collections.config.drivers||{}).list||[]).forEach(d=>dr.push([d.name,d.plate||'',d.phone||'',d.car||'',d.civilId||'',d.token||'']));
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(dr),'Drivers');
-  const js=JSON.stringify(data);const ch=[['Sami Taxi backup – do not edit this sheet']];for(let k=0;k<js.length;k+=30000)ch.push([js.slice(k,k+30000)]);
+  const js=JSON.stringify(data);const ch=[['IBRAHIM Taxi backup – do not edit this sheet']];for(let k=0;k<js.length;k+=30000)ch.push([js.slice(k,k+30000)]);
   XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(ch),'_backup');return XLSX.write(wb,{bookType:'xlsx',type:'array'})}
 $('#bkBtn').onclick=()=>{$('#bkDlg').classList.add('open')};
 $('#bkNo').onclick=()=>$('#bkDlg').classList.remove('open');
 document.addEventListener('click',async e=>{const o=e.target.closest('[data-bkfmt]');if(!o)return;const fmt=o.dataset.bkfmt;$('#bkDlg').classList.remove('open');
   const btn=$('#bkBtn');btn.disabled=true;btn.textContent='Preparing…';
-  try{const data=await collectBackup();const n=Object.values(data.collections.days).reduce((a,d)=>a+(d.trips||[]).length,0);const js=JSON.stringify(data);const base=`SamiTaxi_backup_${today()}`;
+  try{const data=await collectBackup();const n=Object.values(data.collections.days).reduce((a,d)=>a+(d.trips||[]).length,0);const js=JSON.stringify(data);const base=`IBRAHIMTaxi_backup_${today()}`;
     if(fmt==='copy'){const ok=copySync(js);toast(ok?'Backup copied – open Notes, new note, Paste':'Could not copy – use the .txt option')}
     else{const dl=await claude.use('downloads');if(!dl){toast('Download is not available here');return}
       if(fmt==='json')await dl.save({filename:base+'.json',data:new Blob([js],{type:'application/json'})});
@@ -2275,16 +2275,16 @@ $('#rsBtn').onclick=()=>{$('#rsDlg').classList.add('open')};
 $('#rsNo').onclick=()=>$('#rsDlg').classList.remove('open');
 $('#rsFile').onclick=()=>{$('#rsDlg').classList.remove('open');$('#rsIn').click()};
 $('#rsPasteGo').onclick=async()=>{const t=$('#rsPaste').value.trim();$('#rsDlg').classList.remove('open');if(!t)return;await doRestore(t)};
-async function getAppSrc(){let src='';try{const r=await fetch(location.href.split('#')[0],{cache:'no-store'});const t=await r.text();if(/Sami Taxi/.test(t)&&t.length>50000)src=t}catch(_){}return src||APP_SRC_SNAPSHOT}
+async function getAppSrc(){let src='';try{const r=await fetch(location.href.split('#')[0],{cache:'no-store'});const t=await r.text();if(/IBRAHIM Taxi/.test(t)&&t.length>50000)src=t}catch(_){}return src||APP_SRC_SNAPSHOT}
 $('#codeBtn').onclick=()=>$('#cdDlg').classList.add('open');$('#cdNo').onclick=()=>$('#cdDlg').classList.remove('open');
 document.addEventListener('click',async e=>{const o=e.target.closest('[data-cdfmt]');if(!o)return;const fmt=o.dataset.cdfmt;$('#cdDlg').classList.remove('open');
-  try{const src=await getAppSrc();const base=`SamiTaxi_app_code_${today()}`;
+  try{const src=await getAppSrc();const base=`IBRAHIMTaxi_app_code_${today()}`;
     if(fmt==='copy'){toast(copySync(src)?'App code copied – open Notes, new note, Paste':'Could not copy – use the .txt option');return}
     const dl=await claude.use('downloads');if(!dl){toast('Download is not available here');return}
     if(fmt==='html')await dl.save({filename:base+'.html',data:new Blob([src],{type:'text/html'})});
     if(fmt==='txt')await dl.save({filename:base+'.txt',data:new Blob([src],{type:'text/plain'})});
     toast('App code saved')}catch(err){if(err&&err.code!=='declined')toast('Could not save the app code')}});
-async function doRestore(text){try{const data=JSON.parse(text);const C=data.collections||{};if(!C.days||!C.config){toast('This is not a Sami Taxi backup');return}
+async function doRestore(text){try{const data=JSON.parse(text);const C=data.collections||{};if(!C.days||!C.config){toast('This is not a IBRAHIM Taxi backup');return}
     const nd=Object.keys(C.days).length;
     if(!(await askConfirm(`Restore backup from ${data.backup_date||'?'}? It will put back ${nd} days of rides and all customers, drivers and settings. Rides added after that date stay, but days in the backup are replaced.`,'Restore')))return;
     toast('Restoring…');
