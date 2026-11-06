@@ -292,6 +292,17 @@ select.need{border:2px solid var(--danger)!important;background:#B4231814!import
 </style>
 </head>
 <body>
+  <script>
+    (function() {
+        var p = prompt("Enter Password to access IBRAHIM TAXI:");
+        if (p !== "12345") {
+            alert("Incorrect password!");
+            document.body.innerHTML = "<h1 style='text-align:center;margin-top:100px;font-family:sans-serif;'>Access Denied.</h1>";
+            window.stop();
+        }
+    })();
+</script>
+
 <div class="wrap">
   <header>
     <div class="brand"> 🚖 IBRAHIM TAXI</div>
